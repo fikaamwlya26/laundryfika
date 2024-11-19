@@ -78,7 +78,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Bening - Tables</title>
+    <title>Fika - Tables</title>
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -109,7 +109,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Bening <sup>Laundry</sup></div>
+                <div class="sidebar-brand-text mx-3">Laundry <sup>Fika</sup></div>
             </a>
 
             <!-- Divider -->
@@ -203,7 +203,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Fika Amaliya</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -212,15 +212,15 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Profil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Pengaturan
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                    Aktivitas
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -324,11 +324,11 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                     <form id="formTambah" method="POST" action=""> 
                         <div class="mb-3">
                           <label for="pelanggan" class="form-label">Pelanggan</label> 
-                          <input type="text" class="form-control" id="pelanggan" required>  <!-- tambahkan name disini -->
+                          <input type="text" class="form-control" name="pelanggan" id="pelanggan" required>  <!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                           <label for="status" class="form-label">Status</label>
-                          <select class="form-control" id="status" required><!-- tambahkan name disini -->                       
+                          <select class="form-control" name="status" id="status" required><!-- tambahkan name disini -->                       
                             <option>Baru</option>
                             <option>Proses</option>
                             <option>Selesai</option>
@@ -337,19 +337,19 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                         </div>
                         <div class="mb-3">
                           <label for="kodeInvoice" class="form-label">Kode Invoice</label>
-                          <input type="datetime-local" class="form-control" id="kodeInvoice" required><!-- tambahkan name disini -->
+                          <input type="datetime-local" class="form-control" name="kode_invoice" id="kodeInvoice" required><!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                           <label for="tanggal" class="form-label">Tanggal</label>
-                          <input type="datetime-local" class="form-control" id="tanggal" required> <!-- tambahkan name disini -->
+                          <input type="datetime-local" class="form-control" name="tanggal" id="tanggal" required> <!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                           <label for="batasWaktu" class="form-label">Batas Waktu</label>
-                          <input type="datetime-local" class="form-control" id="batasWaktu" required> <!-- tambahkan name disini -->
+                          <input type="datetime-local" class="form-control" name="batas waktu" id="batasWaktu" required> <!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                             <label for="dibayar" class="form-label">Dibayar</label>
-                            <select id="dibayar" class="form-control" > <!-- tambahkan name disini -->
+                            <select id="dibayar" name="dibayar" class="form-control" > <!-- tambahkan name disini -->
                                 <option value="Sudah">Sudah</option>
                                 <option value="Belum">Belum</option>
                             </select>
@@ -357,11 +357,11 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                         
                         <div class="mb-3" id="divTanggalDibayar" style="display: none;">
                             <label for="tanggalDibayar" class="form-label">Tanggal Dibayar</label>
-                            <input type="datetime-local" class="form-control" id="tanggalDibayar" > <!-- tambahkan name disini -->
+                            <input type="datetime-local" class="form-control" name="tanggal dibayar" id="tanggalDibayar" > <!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                           <label for="total" class="form-label">Total</label>
-                          <input type="number" class="form-control"  id="total" required> <!-- tambahkan name disini -->
+                          <input type="number" class="form-control" name="total" id="total" required> <!-- tambahkan name disini -->
                         </div>
                       </form>
                     </div> 
@@ -573,13 +573,57 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
 
     <!-- script untuk menambah data -->
     <!-- tambahkan script untuk menambah data disini -->
+        <script> 
+        document.getElementById("dibayar").addEventListener("change",
+         function () { 
+            const tanggalDibayarDiv = 
+        document.getElementById("divTanggalDibayar"); 
+        tanggalDibayarDiv.style.display = this.value === "Sudah" ? 
+        "block" : "none"; 
+                    }); 
+        </script> 
 
     <!-- script edit -->
     <!-- tambahkan script untuk mengedit disini -->
+    <script> 
+    function openEditModal(id, status, tanggalDibayar, dibayar) { 
+        // Mengisi nilai input dalam modal edit 
+        document.getElementById('edit_id').value = id; 
+        document.getElementById('edit_status').value = status; 
+        document.getElementById('edit_tanggal_dibayar').value = tanggalDibayar; 
+        document.getElementById('edit_dibayar').value = dibayar; 
+        // Menampilkan modal 
+        const editModal = new 
+    bootstrap.Modal(document.getElementById('editModal')); 
+        editModal.show();
+    } 
+        // Fungsi untuk mengupdate data 
+        function updateData() { 
+            const form = document.getElementById('formEdit'); 
+            const formData = new FormData(form); 
+            // Kirim data menggunakan fetch API 
+            fetch('', { // Menggunakan URL yang sama (file ini) untuk mengirim data 
+            method: 'POST', 
+            body: formData, 
+            }) 
+            .then(response => response.text()) 
+            .then(data => { 
+                console.log(data); // Tampilkan respon server 
+                location.reload(); // Refresh halaman setelah data diperbarui }) 
+            })
+                .catch(error => { 
+                    console.error('Error:', error); 
+            }); 
+    } 
+    </script> 
 
     <!-- script untuk hapus data -->
     <!-- tambahkab script untuk menghapus data disini -->
-
+    <script> 
+    function setDeleteId(id) { 
+    document.getElementById('deleteId').value = id; 
+    } 
+    </script> 
 
 </body>
 
