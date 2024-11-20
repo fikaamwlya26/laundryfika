@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2024 at 07:01 AM
+-- Generation Time: Nov 20, 2024 at 07:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `laundryfika`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_produk`
+--
+
+CREATE TABLE `tb_produk` (
+  `id_barang` int(11) NOT NULL,
+  `nama_barang` varchar(255) DEFAULT NULL,
+  `deskripsi` mediumtext DEFAULT NULL,
+  `harga` int(11) DEFAULT NULL,
+  `berat` int(11) NOT NULL,
+  `stok` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_produk`
+--
+
+INSERT INTO `tb_produk` (`id_barang`, `nama_barang`, `deskripsi`, `harga`, `berat`, `stok`) VALUES
+(9, 'Parfum violet', 'parfum laundry dengan aroma bunga', 25000, 30, 50);
 
 -- --------------------------------------------------------
 
