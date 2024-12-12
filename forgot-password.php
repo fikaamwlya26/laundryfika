@@ -38,7 +38,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                         <div class="col-lg-6 d-flex align-items-center justify-content-center">    
-                                <img src="img/login.svg" alt="Login Image" class="img-fluid">      
+                                <img src="img/login.svg" alt="Login Image" class="img-fluid" style=" width: 350px; height: auto; border-radius: 10px; box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2); margin-left: 30px;">      
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">

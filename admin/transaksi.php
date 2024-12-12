@@ -122,25 +122,36 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                     <span>Dashboard</span></a>
             </li>
 
-             <!-- Nav Item - Transaksi -->
-            <li class="nav-item active">
-                <a class="nav-link" href="transaksi.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Transaksi</span></a>
-            </li>
-
-            <!-- Nav Item - Produk -->
+                          <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="produk.php">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa fa-folder"></i>
                     <span>Produk</span></a>
             </li>
-
-            <!-- Nav Item - Layanan -->
             <li class="nav-item">
-                <a class="nav-link" href="layanan.php">
-                    <i class="fas fa-fw fa-table"></i>
+                <a class="nav-link" href="layanan.php"> 
+                    <i class="fas fa-fw fa-laptop"></i>
                     <span>Layanan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="transaksi.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Transaksi</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="komentar.php"> 
+                    <i class="fas fa-fw fa-comments"></i>
+                    <span>Komentar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="user.php"> 
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>User</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="setting.php"> 
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2"></i>
+                    <span>Setting</span></a>
             </li>
 
 
@@ -499,21 +510,21 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="../js/demo/datatables-demo.js"></script>
     
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

@@ -1,0 +1,548 @@
+/* Base styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fcfcfc; /* Light pastel blue background */
+    padding-top: 40px;
+}
+
+/* Menghilangkan garis bawah dan border pada tombol */
+button {
+    border: none;            /* Menghilangkan border default */
+    outline: none;           /* Menghilangkan outline ketika tombol di-klik */
+    text-decoration: none;   /* Menghilangkan garis bawah pada teks tombol */
+    background: none;        /* Menghilangkan background default jika ada */
+    padding: 10px 20px;      /* Memberikan padding untuk tombol agar terlihat lebih besar */
+    cursor: pointer;        /* Menambahkan cursor pointer saat hover */
+    border-radius: 5px;      /* Membuat sudut tombol lebih bulat */
+    font-weight: 600;        /* Mengatur ketebalan font */
+    font-size: 16px;         /* Ukuran font tombol */
+    transition: background-color 0.3s ease;  /* Efek transisi untuk hover */
+}
+
+/* Tombol btn-primary */
+.btn.btn-primary {
+    background-color: #3498db;  /* Warna biru */
+    color: white;               /* Warna teks putih */
+}
+
+/* Tombol btn-primary saat hover */
+.btn.btn-primary:hover {
+    background-color: #2980b9;  /* Warna lebih gelap saat hover */
+}
+
+/* Tombol btn-secondary */
+.btn.btn-secondary {
+    background-color: #f1c40f;  /* Warna kuning */
+    color: white;                /* Warna teks putih */
+}
+
+/* Tombol btn-secondary saat hover */
+.btn.btn-secondary:hover {
+    background-color: #e67e22;  /* Warna lebih gelap saat hover */
+}
+
+/* Navbar */
+header {
+    background-color: #3498db;  /* Warna biru yang lebih cerah */
+    color: white;
+    padding: 10px 30px;  /* Padding ramping dan lebih luas untuk ruang antar elemen */
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;  /* Navbar tetap di atas saat scroll */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Bayangan halus untuk kesan modern */
+    box-sizing: border-box;
+}
+
+/* Logo */
+header img {
+    max-height: 40px;  /* Memperkecil ukuran logo agar lebih proporsional */
+}
+
+/* Navbar links */
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;  /* Memberikan jarak antar link */
+    font-size: 16px;  /* Ukuran font yang tidak terlalu besar */
+    font-weight: 500;  /* Font lebih ringan */
+    transition: color 0.3s ease;  /* Transisi halus saat hover */
+}
+
+/* Hover effect pada link */
+nav a:hover {
+    color: #eaf4f9;  /* Ganti warna saat hover */
+}
+
+/* Tombol Masuk */
+.login-btn {
+    background-color: #eaf4f9;  /* Warna tombol */
+    color: #333;
+    padding: 8px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #eaf4f9;  /* Ganti warna tombol saat hover */
+}
+
+/* Navbar customization */
+nav {
+    width: auto; 
+    display: flex;
+    justify-content: center; 
+} 
+header > nav {
+    flex-grow: 1; 
+    justify-content: flex-start;  
+}
+
+/* Hero section */
+.hero { 
+    height: 30em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #3498db; /* Pastel blue background */
+    color: #fff;
+    animation: fadeIn 2s ease;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+}
+
+.hero-text p {
+    font-size: 1.25rem;
+    margin: 20px 0;
+}
+
+.hero-text .btn {
+    padding: 10px 20px;
+    background-color: #6fa3ef; /* Matching button color with header */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.hero-text .btn:hover {
+    background-color: #4a80b3; /* Slightly darker for hover effect */
+}
+
+.hero img {
+    max-width: 500px;
+    width: 100%;
+    transition: transform 0.3s;
+}
+
+.hero img:hover {
+    transform: scale(1.05);
+}
+
+/* Service Section */
+.services { 
+    padding: 50px;
+    background-color: #f4f9fd; /* Very light pastel blue for the service section */
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 2.5rem;
+}
+
+.service-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.service-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+.service-card img {
+    max-width: 50px;
+    margin-bottom: 20px;
+}
+
+.service-card h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
+
+.service-card a {
+    color: #6fa3ef; /* Light pastel blue for links */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.service-card a:hover {
+    color: #4a80b3; /* Darker pastel blue for hover */
+}
+
+/* Order Section */
+.order-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #e4f2fb; /* Light pastel blue for order section */
+    animation: fadeIn 2s ease;
+}
+
+.order-section img {
+    max-width: 50%;
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.order-section img:hover {
+    transform: scale(1.05);
+}
+
+.order-text {
+    width: 45%;
+    padding-left: 20px;
+}
+
+.order-text h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.order-text p {
+    font-size: 1.25rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.order-text .btn {
+    padding: 12px 25px;
+    background-color: #6fa3ef; /* Matching button with header */
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.order-text .btn:hover {
+    background-color: #4a80b3;
+}
+
+/* Testimonial Section */
+.testimonials {
+    text-align: center;
+    padding: 50px 20px; 
+    background-color: #f9f9f9;
+}
+
+.testimonials h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.testimonials p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.testimonial-card {
+    background-color: #e8f4fd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.testimonial-card img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.testimonial-card h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 5px;
+}
+
+.testimonial-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+.rating i {
+    color: #ffc107; /* Warna bintang */
+    margin: 0 2px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #333;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+/* Styling untuk form tambah komentar */
+.comment-section {
+    display: flex;
+    justify-content: space-between; /* Membuat dua kolom */
+    gap: 30px; /* Memberi jarak antara kolom */
+    margin: 20px;
+}
+
+.form-container, .comment-list-container {
+    width: 48%; /* Membagi lebar menjadi dua kolom */
+}
+
+form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+} 
+
+.comment-list {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.comment-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.comment-item p {
+    margin: 10px 0;
+}
+
+.comment-item small {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+
+.products {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.products h2 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.products p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.product-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+/* General Footer Styling */
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 40px 0;
+    font-family: Arial, sans-serif;
+    text-align: center; /* Center content */
+}
+
+.footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the footer content */
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 220px;
+    max-width: 300px;
+    padding: 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.footer-column p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+.footer-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-column ul li a:hover {
+    color: #fff;
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icons a {
+    color: #fff;
+    margin-right: 15px;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #f39c12; /* Warna emas untuk efek hover */
+}
+
+.footer-bottom {
+    padding: 20px 0;
+    background-color: #222;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    color: #aaa;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .service-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .service-card {
+        width: 80%;
+    }
+    .testimonial-card {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .testimonial-card img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 35px;
+        height: 35px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 16px;
+        height: 16px;
+    }
+    .footer-top {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-column {
+        min-width: auto;
+        margin-bottom: 30px;
+    }
+
+    .social-icons a {
+        margin-right: 10px;
+    }
+
+    .footer-bottom p {
+        font-size: 12px;
+    }
+}

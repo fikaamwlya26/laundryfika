@@ -1,29 +1,45 @@
 <?php 
-include '../koneksi/koneksi.php';// panggil dile koneksi.php disini
+include '../koneksi/koneksi.php'; // Panggil file koneksi.php disini
+
 // Menangani pengiriman form untuk "Create"
-// buat perintah untuk mengirimkan inputan disini!
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['status'], $_POST['kode_invoice'], $_POST['pelanggan'], 
-              $_POST['tanggal'], $_POST['batas_waktu'], $_POST['tanggal_dibayar'], 
-              $_POST['dibayar'], $_POST['total'])) {
-        // Ambil data dari post
+    // Cek apakah semua field sudah diisi
+    if (isset($_POST['nama_layanan'], $_POST['deskripsi'], $_POST['kategori'], $_POST['berat'], 
+              $_POST['status'], $_POST['harga']) && isset($_FILES['gambar'])) {
+        
+        // Ambil data dari form POST
+        $nama_layanan = $_POST['nama_layanan'];
+        $deskripsi = $_POST['deskripsi'];
+        $kategori = $_POST['kategori'];
+        $berat = $_POST['berat'];
         $status = $_POST['status'];
-        $kode_invoice = $_POST['kode_invoice'];
-        $pelanggan = $_POST['pelanggan'];
-        $tanggal = $_POST['tanggal'];
-        $batas_waktu = $_POST['batas_waktu'];
-        $tanggal_dibayar = $_POST['tanggal_dibayar'];
-        $dibayar = $_POST['dibayar'];
-        $total = $_POST['total'];
-        // Query untuk menambah data
-        $query = "INSERT INTO tb_transaksi (status, kode_invoice, pelanggan, tanggal, batas_waktu, tanggal_dibayar, dibayar, total)
-                  VALUES ('$status', '$kode_invoice', '$pelanggan', '$tanggal', '$batas_waktu', '$tanggal_dibayar', '$dibayar', '$total')";
-        if (mysqli_query($koneksi, $query)) {
-            // Redirect setelah berhasil menambah data
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit();
+        $harga = $_POST['harga'];
+        
+        // Mengelola upload gambar
+        $target_dir = "../img/produk/";
+        $gambar = $_FILES['gambar']['name'];
+        $target_file = $target_dir . basename($gambar);
+
+        // Periksa apakah gambar berhasil di-upload
+        if ($_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+            if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target_file)) {
+                // Query untuk menambah data
+                $query = "INSERT INTO tb_produk (nama_barang, deskripsi, harga, stok, gambar) 
+                          VALUES ('$nama_barang', '$deskripsi', $harga, $stok, '$gambar')";
+
+                if (mysqli_query($koneksi, $query)) {
+                    echo "Sukses menambahkan data produk!";
+                    // Redirect setelah berhasil menambah data
+                    header("Location: " . $_SERVER['PHP_SELF']);
+                    exit();
+                } else {
+                    echo "Error: " . mysqli_error($koneksi);
+                }
+            } else {
+                echo "Gagal mengunggah gambar.";
+            }
         } else {
-            echo "Error: " . mysqli_error($koneksi);
+            echo "Terjadi kesalahan saat mengupload gambar.";
         }
     } else {
         echo "Semua field harus diisi!";
@@ -34,11 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // buat perintah untuk mengedit disini!
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['action']) && $_POST['action'] === 'edit') {
     $id = $_POST['id'];
+    $kategori = $_POST['kategori'];
     $status = $_POST['status'];
-    $tanggal_dibayar = $_POST['tanggal_dibayar'];
-    $dibayar = $_POST['dibayar'];
+    $harga = $_POST['harga'];
 
-    $query = "UPDATE tb_transaksi SET status='$status', tanggal_dibayar='$tanggal_dibayar', dibayar='$dibayar' WHERE id='$id'";
+    $query = "UPDATE tb_layanan SET kategori='$kategori', status='$status', harga='$harga' WHERE id='$id'";
+
 
     if (mysqli_query($koneksi, $query)) {
         // Redirect setelah berhasil mengedit data
@@ -48,23 +65,43 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['action']) && $_POST['a
         echo "Error: " . mysqli_error($koneksi);
     }
 }
-// Menangani pengiriman form untuk "Delete"
-// buat perintah untuk mengirimkan menghapus data disini!
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $id = $_POST['id'];
+// Menangani pengiriman form untuk "Delete" 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    // Validasi dan sanitasi input ID produk
+    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
-    $query = "DELETE FROM tb_transaksi WHERE id='$id'";
+    if ($id > 0) {
+        // Menyiapkan query untuk menghapus data berdasarkan id_barang
+        $query = "DELETE FROM tb_layanan WHERE id = ?";
 
-    if (mysqli_query($koneksi, $query)) {
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
-    }else {
-            echo "Error: " . mysqli_error($koneksi);     
+        // Menyiapkan statement
+        if ($stmt = mysqli_prepare($koneksi, $query)) {
+            // Mengikat parameter ke statement
+            mysqli_stmt_bind_param($stmt, "i", $id);  // "i" untuk integer
+
+            // Menjalankan statement
+            if (mysqli_stmt_execute($stmt)) {
+                // Redirect setelah berhasil menghapus data
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } else {
+                // Menampilkan pesan kesalahan jika query gagal
+                echo "Gagal menghapus produk. Error: " . mysqli_stmt_error($stmt);
+            }
+
+            // Menutup statement
+            mysqli_stmt_close($stmt);
+        } else {
+            // Menampilkan pesan kesalahan jika query prepare gagal
+            echo "Gagal menyiapkan query. Error: " . mysqli_error($koneksi);
+        }
+    } else {
+        echo "ID produk tidak valid.";
     }
 }
+
 // Mengambil data untuk "Read"
-// buat perintah untuk mengambil data disini 
-$result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
+$result = mysqli_query($koneksi, "SELECT * FROM tb_layanan");
 ?>
  
 <!DOCTYPE html>
@@ -122,27 +159,37 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                     <span>Dashboard</span></a>
             </li>
 
-             <!-- Nav Item - Transaksi -->
-            <li class="nav-item active">
-                <a class="nav-link" href="transaksi.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Transaksi</span></a>
-            </li>
-
-            <!-- Nav Item - Produk -->
-            <li class="nav-item">
+             <!-- Nav Item - Tables -->
+             <li class="nav-item">
                 <a class="nav-link" href="produk.php">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa fa-folder"></i>
                     <span>Produk</span></a>
             </li>
-
-            <!-- Nav Item - Layanan -->
             <li class="nav-item">
-                <a class="nav-link" href="layanan.php">
-                    <i class="fas fa-fw fa-table"></i>
+                <a class="nav-link" href="layanan.php"> 
+                    <i class="fas fa-fw fa-laptop"></i>
                     <span>Layanan</span></a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link" href="transaksi.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Transaksi</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="komentar.php"> 
+                    <i class="fas fa-fw fa-comments"></i>
+                    <span>Komentar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="user.php"> 
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>User</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="setting.php"> 
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2"></i>
+                    <span>Setting</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -265,15 +312,14 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr class="center">
-                                            <th>No</th> 
-                                            <th >Nama Pelanggan</th>
-                                            <th>Status</th>
-                                            <th>Kode Invoice</th>
-                                            <th>Tanggal</th>
-                                            <th>Batas Waktu</th>
-                                            <th>Tanggal Dibayar</th>
-                                            <th>Dibayar</th>
-                                            <th>Total</th>
+                                            <th>No</th>
+                                            <th>Layanan</th>
+                                            <th >Nama Layanan</th>
+                                            <th>Deskripsi</th>
+                                            <th> Kategori </th>
+                                            <th>Berat</th>
+                                            <th> Status</th>
+                                            <th>Harga</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead> 
@@ -281,15 +327,14 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                                         <?php $no = 1; while ($row = mysqli_fetch_assoc($result)): ?>
                                         <tr>
                                             <td><?= $no++; ?></td>                      <!--pemanggilan data nomor/id dari database-->
-                                            <td><?= $row['pelanggan']; ?></td>          <!--pemanggilan data nama pelanggan dari database-->
-                                            <td><?= $row['status']; ?></td>             <!--pemanggilan data status dari database-->
-                                            <td><?= $row['tanggal']; ?></td>            <!--pemanggilan data kode_invoice dari database-->
-                                            <td><?= $row['kode_invoice']; ?></td>       <!--pemanggilan data tanggal dari database-->
-                                            <td><?= $row['batas_waktu']; ?></td>        <!--pemanggilan data batas_waktu dari database-->
-                                            <td><?= $row['tanggal_dibayar']; ?></td>    <!--pemanggilan data tanggal dibayar dari database-->
-                                            <td><?= $row['dibayar']; ?></td>            <!--pemanggilan data status pembayaran dari database-->
-                                            <td><?= $row['total']; ?></td>              <!--pemanggilan data total dari database-->
-                                        
+                                            <td><img src="../img/layanan/<?= $row['gambar']; ?>" alt="<?= $row['nama_layanan']; ?>" width="100"></td>
+                                            <td><?= $row['nama_layanan']; ?></td>          <!--pemanggilan data nama barang dari database-->
+                                            <td><?= $row['deskripsi']; ?></td>             <!--pemanggilan data dekripsi dari database-->
+                                            <td><?= $row['kategori']; ?></td>            <!--pemanggilan data kategori dari database-->
+                                            <td><?= $row['berat']; ?> Kg</td>       <!--pemanggilan data berat dari database-->
+                                            <td><?= $row['status']; ?></td>        <!--pemanggilan data status dari database-->
+                                            <td><?= $row['harga']; ?></td>            <!--pemanggilan data harga dari database-->
+                                            
 
                                     <!-- buat pemanggilan data disini untuk mengisi tabel  -->
                                          
@@ -300,7 +345,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                                                     <i class="fas fa-info-circle"></i> Detail
                                                 </button> 
                                                 <!--Tombol Edit-->
-                                                <button class="btn btn-warning btn-sm" onclick="openEditModal(<?php echo $row['id']; ?>, '<?php echo $row['status']; ?>', '<?php echo $row['tanggal_dibayar']; ?>', '<?php echo $row['dibayar']; ?>')">
+                                                <button class="btn btn-warning btn-sm" onclick="openEditModal(<?php echo $row['id']; ?>, '<?php echo $row['kategori']; ?>', '<?php echo $row['status']; ?>', '<?php echo $row['harga']; ?>')">
                                                     <i class="fas fa-pencil-alt"></i> Edit
                                                 </button>
                                                 <!--Tombol Hapus-->
@@ -336,49 +381,42 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                          <!-- Setiap inputan tambahkan name yang sesuai dengan database
                           contoh:
                           name="nama" //sesuaikan dengan nama kolom pada tabel database -->
-                    <form id="formTambah" method="POST" action=""> 
+                    <form id="formTambah" method="POST" action="">
+                    <div class="mb-3">
+                        <label for="gambar" class="form-label">Gambar Layanan</label>
+                        <input type="file" class="form-control" name="gambar" id="gambar" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                          <label for="nama_layanan" class="form-label">Nama Layanan</label> 
+                          <input type="text" class="form-control" name="nama_layanan" id="nama_layanan" required>  <!-- tambahkan name disini -->
+                        </div>
                         <div class="mb-3">
-                          <label for="pelanggan" class="form-label">Pelanggan</label> 
-                          <input type="text" class="form-control" name="pelanggan" id="pelanggan" required>  <!-- tambahkan name disini -->
+                          <label for="deskripsi" class="form-label">Deskripsi</label> 
+                          <input type="text" class="form-control" name="deskripsi" id="deskripsi" required>  <!-- tambahkan name disini -->
+                        </div>
+                        <div class="mb-3">
+                            <label for="kategori" class="form-label">Kategori</label>
+                            <select id="kategori" name="kategori" class="form-control" > <!-- tambahkan name disini -->
+                                <option value="Sudah">Cuci</option>
+                                <option value="Belum">Setrika</option>
+                                <option value="Sudah">Cuci Setrika</option>
+
+                            </select>
+                        <div class="mb-3">
+                          <label for="berat" class="form-label">Berat</label> 
+                          <input type="text" class="form-control" name="berat" id="berat" required>  <!-- tambahkan name disini -->
                         </div>
                         <div class="mb-3">
                           <label for="status" class="form-label">Status</label>
                           <select class="form-control" name="status" id="status" required><!-- tambahkan name disini -->                       
-                            <option>Baru</option>
-                            <option>Proses</option>
-                            <option>Selesai</option>
-                            <option>Diambil</option>
+                            <option>Sedia</option>
+                            <option>Tidak Sedia</option>
                           </select>
-                        </div>
                         <div class="mb-3">
-                          <label for="kodeInvoice" class="form-label">Kode Invoice</label>
-                          <input type="datetime-local" class="form-control" name="kode_invoice" id="kodeInvoice" required><!-- tambahkan name disini -->
+                          <label for="harga" class="form-label">Harga</label>
+                          <input type="number" class="form-control" name="harga" id="harga" required> <!-- tambahkan name disini -->
                         </div>
-                        <div class="mb-3">
-                          <label for="tanggal" class="form-label">Tanggal</label>
-                          <input type="datetime-local" class="form-control" name="tanggal" id="tanggal" required> <!-- tambahkan name disini -->
-                        </div>
-                        <div class="mb-3">
-                          <label for="batasWaktu" class="form-label">Batas Waktu</label>
-                          <input type="datetime-local" class="form-control" name="batas waktu" id="batasWaktu" required> <!-- tambahkan name disini -->
-                        </div>
-                        <div class="mb-3">
-                            <label for="dibayar" class="form-label">Dibayar</label>
-                            <select id="dibayar" name="dibayar" class="form-control" > <!-- tambahkan name disini -->
-                                <option value="Sudah">Sudah</option>
-                                <option value="Belum">Belum</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3" id="divTanggalDibayar" style="display: none;">
-                            <label for="tanggalDibayar" class="form-label">Tanggal Dibayar</label>
-                            <input type="datetime-local" class="form-control" name="tanggal dibayar" id="tanggalDibayar" > <!-- tambahkan name disini -->
-                        </div>
-                        <div class="mb-3">
-                          <label for="total" class="form-label">Total</label>
-                          <input type="number" class="form-control" name="total" id="total" required> <!-- tambahkan name disini -->
-                        </div>
-                      </form>
+                    </form>
                     </div> 
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> 
@@ -396,7 +434,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Data Transaksi</h5>
+                            <h5 class="modal-title" id="editModalLabel">Edit Data Layanan Laundry</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -404,24 +442,23 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
                                 <input type="hidden" id="edit_id" name="id">
                                 <input type="hidden" name="action" value="edit">
                                 <div class="mb-3">
+                                    <label for="edit_kategori" class="form-label">Kategori</label>
+                                    <select class="form-control" id="edit_kategori" name="kategori" required>
+                                        <option value="Sudah">Cuci</option>
+                                        <option value="Belum">Setrika</option>
+                                        <option value="Belum">Cuci Setrika</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
                                     <label for="edit_status" class="form-label">Status</label>
                                     <select class="form-control" id="edit_status" name="status" required>
-                                        <option value="Baru">Baru</option>
-                                        <option value="Proses">Proses</option>
-                                        <option value="Selesai">Selesai</option>
-                                        <option value="Diambil">Diambil</option>
+                                        <option value="Baru">Sedia</option>
+                                        <option value="Proses">Tidak Sedia</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="edit_tanggal_dibayar" class="form-label">Tanggal Dibayar</label>
-                                    <input type="datetime-local" class="form-control" id="edit_tanggal_dibayar" name="tanggal_dibayar">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit_dibayar" class="form-label">Dibayar</label>
-                                    <select class="form-control" id="edit_dibayar" name="dibayar" required>
-                                        <option value="Sudah">Sudah</option>
-                                        <option value="Belum">Belum</option>
-                                    </select>
+                                    <label for="edit_harga" class="form-label">Harga</label>
+                                    <input type="number" class="form-control" name="harga" id="edit_harga" required> <!-- tambahkan name disini -->
                                 </div>
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             </form>
@@ -499,21 +536,21 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="../js/demo/datatables-demo.js"></script>
     
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -538,14 +575,17 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
         let nomor = 1;
 
         function tambahData() {
-            const status = document.getElementById('status').value;
-            const kodeInvoice = document.getElementById('kodeInvoice').value;
-            const pelanggan = document.getElementById('pelanggan').value;
-            const tanggal = document.getElementById('tanggal').value;
-            const batasWaktu = document.getElementById('batasWaktu').value;
-            const dibayar = document.getElementById('dibayar').value;
-            let tanggalDibayar = document.getElementById('tanggalDibayar').value || '-'; // Default '-' jika kosong
-            const total = document.getElementById('total').value;
+            const NamaBarang = document.getElementById('gambar').value;
+            const NamaBarang = document.getElementById('namaLayanan').value;
+            const Deskripsi = document.getElementById('deksripsi').value;
+            const Harga = document.getElementById('kategori').value;
+            const berat = document.getElementById('berat').value;
+            // const batasWaktu = document.getElementById('batasWaktu').value;
+            // const dibayar = document.getElementById('dibayar').value;
+            // let tanggalDibayar = document.getElementById('tanggalDibayar').value || '-'; // Default '-' jika kosong
+            const stok = document.getElementById('status').value;
+            const NamaBarang = document.getElementById('harga').value;
+
 
             // Jika dibayar "Belum", kosongkan tanggal dibayar
             if (dibayar === 'Belum') {
@@ -556,14 +596,13 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
             const newRow = `
             <tr>
                 <td>${nomor}</td>
-                <td>${pelanggan}</td>
+                <td>${gambar}</td>
+                <td>${namaLayanan}</td>
+                <td>${deskripsi}</td>
+                <td>${kategori}</td>
+                <td>${berat}</td>
                 <td>${status}</td>
-                <td>${kodeInvoice}</td>
-                <td>${tanggal}</td>
-                <td>${batasWaktu}</td>
-                <td>${tanggalDibayar}</td>
-                <td>${dibayar}</td>
-                <td>Rp ${total}</td>
+                <td>Rp ${harga}</td>
                 <td>
                 <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal">Detail</button>
                 <button class="btn btn-warning btn-sm">Edit</button>
@@ -601,17 +640,19 @@ $result = mysqli_query($koneksi, "SELECT * FROM tb_transaksi");
     <!-- script edit -->
     <!-- tambahkan script untuk mengedit disini -->
     <script> 
-    function openEditModal(id, status, tanggalDibayar, dibayar) { 
+    function openEditModal(id, kategori, status, harga) { 
         // Mengisi nilai input dalam modal edit 
         document.getElementById('edit_id').value = id; 
+        document.getElementById('edit_kategori').value = kategori; 
         document.getElementById('edit_status').value = status; 
-        document.getElementById('edit_tanggal_dibayar').value = tanggalDibayar; 
-        document.getElementById('edit_dibayar').value = dibayar; 
+        document.getElementById('edit_harga').value = harga; 
         // Menampilkan modal 
         const editModal = new 
     bootstrap.Modal(document.getElementById('editModal')); 
         editModal.show();
     } 
+    </script>
+    <script>
         // Fungsi untuk mengupdate data 
         function updateData() { 
             const form = document.getElementById('formEdit'); 
